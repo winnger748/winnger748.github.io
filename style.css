@@ -301,7 +301,7 @@ body {
 }
 
 .invoice-form::before {
-    content: 'INVOICE #DEV-2026';
+    content: 'CONTACT US';
     position: absolute;
     top: -15px;
     right: 20px;
