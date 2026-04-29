@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Levani Samsonidze | Full-Stack Maverick</title>
+    <meta name="description" content="Levani Samsonidze (WINNGER) is a Full-Stack Developer building modern, fast and scalable web applications using Next.js, React, PHP and Supabase.">
+    <meta name="keywords" content="Levani Samsonidze, WINNGER, Full Stack Developer, Web Developer Georgia, React Developer, Next.js Developer, PHP Developer, Portfolio">
+    <meta name="author" content="Levani Samsonidze (WINNGER)">
+
+    <!-- CANONICAL -->
+    <link rel="canonical" href="https://your-domain.com">
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- OPEN GRAPH (Facebook / LinkedIn) -->
+    <meta property="og:title" content="Levani Samsonidze | Full-Stack Developer | WINNGER">
+    <meta property="og:description" content="Full-Stack Developer building modern web apps with React, Next.js, PHP and Supabase.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:image" content="https://your-domain.com/og-image.png">
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Levani Samsonidze | Full-Stack Developer | WINNGER">
+    <meta name="twitter:description" content="Modern Full-Stack Developer building fast and scalable web applications.">
+    <meta name="twitter:image" content="https://your-domain.com/og-image.png">
+
+    <!-- THEME COLOR (mobile browser UI) -->
+    <meta name="theme-color" content="#000000">
+
+    <!-- PRECONNECT (performance boost) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-lime': '#CCFF00',
+                        'electric-blue': '#0066FF',
+                        'hard-black': '#000000',
+                        'off-white': '#F3F4F6',
+                    },
+                    boxShadow: {
+                        'brutal': '8px 8px 0px 0px rgba(0,0,0,1)',
+                        'brutal-sm': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'brutal-lg': '12px 12px 0px 0px rgba(0,0,0,1)',
+                    },
+                    borderWidth: {
+                        '3': '3px',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- ===== CUSTOM CURSOR ===== -->
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="custom-cursor-dot" id="cursorDot"></div>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="fixed top-0 w-full z-50 bg-off-white/90 backdrop-blur-sm border-b-3 border-hard-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <div class="text-2xl sm:text-3xl font-black tracking-tighter glitch-hover">
+                    <span class="glitch-element" data-text="DC">WINNGER</span>
+                </div>
+                <div class="flex gap-2 sm:gap-4">
+                    <button onclick="toggleTerminal()" 
+                            class="px-3 sm:px-4 py-2 bg-hard-black text-cyber-lime font-bold border-3 border-hard-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-sm sm:text-base">
+                        TERMINAL
+                    </button>
+                    <button onclick="scrollToSection('projects')" 
+                            class="px-3 sm:px-4 py-2 bg-electric-blue text-white font-bold border-3 border-hard-black shadow-brutal-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all text-sm sm:text-base">
+                        WORK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== DRAGGABLE TERMINAL WINDOW ===== -->
+    <div class="terminal-window" id="terminalWindow">
+        <div class="terminal-header" id="terminalHeader">
+            <span class="font-bold text-hard-black">guest@maverick:~</span>
+            <div class="flex gap-2">
+                <button onclick="minimizeTerminal()" class="w-6 h-6 bg-electric-blue border-3 border-hard-black font-bold text-sm">_</button>
+                <button onclick="closeTerminal()" class="w-6 h-6 bg-red-500 border-3 border-hard-black font-bold text-sm">✕</button>
+            </div>
+        </div>
+        <div class="terminal-body">
+            <canvas id="matrixCanvas"></canvas>
+            <div class="terminal-content" id="terminalContent">
+                <div class="mb-4 text-cyber-lime font-bold">
+                    ⚡ MAVERICK TERMINAL v2.0 ⚡
+                </div>
+                <div class="mb-2 text-gray-400">
+                    Type 'help' to see available commands...
+                </div>
+                <div id="terminalOutput"></div>
+                <div class="terminal-input-line mt-4">
+                    <span class="text-electric-blue font-bold">❯</span>
+                    <input type="text" id="terminalInput" placeholder="Enter command..." autofocus>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="min-h-screen flex items-center pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="space-y-6 sm:space-y-8">
+                    <div class="inline-block px-4 py-2 bg-cyber-lime border-3 border-hard-black shadow-brutal-sm font-bold text-sm sm:text-base">
+                        ⚡ AVAILABLE FOR HIRE
+                    </div>
+                    <h1 class="text-5xl sm:text-7xl lg:text-8xl font-black leading-none tracking-tighter">
+                        ENGINEERING
+                        <br>
+                        <span class="text-electric-blue glitch-hover">
+                            <span class="glitch-element" data-text="DIGITAL">DIGITAL</span>
+                        </span>
+                        <br>
+                        Products
+                    </h1>
+                    <p class="text-lg sm:text-xl font-medium text-gray-600 max-w-lg">
+                        Full-Stack Developer helping startups and businesses 
+                        turn ideas into real, working products.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="scrollToSection('projects')" 
+                                class="px-6 py-3 bg-hard-black text-cyber-lime font-bold border-3 border-hard-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                            VIEW PROJECTS →
+                        </button>
+                        <button onclick="scrollToSection('contact')" 
+                                class="px-6 py-3 bg-white text-hard-black font-bold border-3 border-hard-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                            HIRE ME
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Hero Visual - Physics Sandbox -->
+                <div class="physics-sandbox" id="physicsSandbox">
+                    <!-- Tags will be dynamically generated -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== BENTO GRID - ABOUT & STATS ===== -->
+    <section class="py-16 sm:py-20 bg-white border-t-3 border-b-3 border-hard-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-6xl font-black mb-12 tracking-tighter">// ABOUT_ME</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1: About -->
+                <div class="bento-card lg:col-span-2 bg-off-white p-6 sm:p-8 border-3 border-hard-black shadow-brutal">
+                    <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <span class="text-electric-blue">⚡</span> The Architect
+                    </h3>
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        I'm a Full-Stack Developer focused on building modern, high-performance web applications.
+
+                        I work with technologies like Next.js, React, Node.js, and Supabase to create fast, scalable, and user-friendly products.
+
+                        I enjoy turning complex ideas into simple, functional solutions that actually deliver results. 
+                        <span class="font-bold bg-cyber-lime px-2">clean code, brutal performance.</span>
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <span class="px-3 py-1 bg-hard-black text-cyber-lime text-sm font-bold border-3 border-hard-black">TYPESCRIPT</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">REACT</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">NEXT.JS</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">API INTEGRATION</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">NODE.JS</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">PHP</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">SUPABASE</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">VERCEL</span>
+                        <span class="px-3 py-1 bg-hard-black text-white text-sm font-bold border-3 border-hard-black">GIT / GITHUB</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Stats -->
+                <div class="bento-card bg-electric-blue text-white p-6 sm:p-8 border-3 border-hard-black shadow-brutal">
+                    <h3 class="text-xl font-bold mb-4">📊 STATS</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-3xl sm:text-4xl font-black" id="projectsCount" data-target="18">0</div>
+                            <div class="text-sm opacity-80">Projects Launched</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl sm:text-4xl font-black" id="hoursCount" data-target="800">0</div>
+                            <div class="text-sm opacity-80">Hours Coded</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl sm:text-4xl font-black" id="clientsCount" data-target="18">0</div>
+                            <div class="text-sm opacity-80">Happy Clients</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Tech Stack -->
+                <div class="bento-card bg-cyber-lime p-6 sm:p-8 border-3 border-hard-black shadow-brutal">
+                    <h3 class="text-xl font-bold mb-4">🛠️ CORE STACK</h3>
+                    <div class="space-y-2 text-sm font-bold">
+                        <div>→ HTML5 / CSS3 </div>
+                        <div>→ JavaScript (ES6+) </div>
+                        <div>→ TypeScript</div>
+                        <div>→ React / Next.js</div>
+                        <div>→ Node.js </div>
+                        <div>→ REST APIs </div>
+                        <div>→ PostgreSQL </div>
+                        <div>→ Supabase</div>
+                        <div>→ Vercel </div>
+                        <div>→ Git / GitHub </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS GALLERY ===== -->
+    <section id="projects" class="py-16 sm:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl sm:text-6xl font-black mb-12 tracking-tighter">// FEATURED_WORK</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Project 1 -->
+                <a href="https://winnger748.github.io/Pulsefit/" target="_blank" class="project-card block glitch-hover bg-white border-3 border-hard-black shadow-brutal overflow-hidden cursor-pointer decoration-none">
+    
+                    <div class="project-image border-b-3 border-hard-black">
+                        <img src="images/work1.png" 
+                             alt="Pulsefit Landing Page" 
+                             class="w-full h-48 object-cover block">
+                    </div>
+                
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 glitch-element text-black" data-text="Pulsefit – High-Energy Fitness & Gym Landing Page">
+                            Pulsefit – High-Energy Fitness & Gym Landing Page
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Pulsefit is a modern, dynamic landing page designed for fitness centers and personal trainers. The project focuses on high-impact visuals, clear call-to-action (CTA) elements, and a smooth user journey. I prioritized performance and mobile-first responsiveness.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">HTML5</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">Javascript</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">CSS 3</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">Landing Page</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://winnger748.github.io/aursmile/" target="_blank" class="project-card block glitch-hover bg-white border-3 border-hard-black shadow-brutal overflow-hidden cursor-pointer no-underline">
+    
+                    <div class="project-image border-b-3 border-hard-black">
+                        <img src="images/work2.png" 
+                             alt="Aursmile Healthcare Landing Page" 
+                             class="w-full h-48 object-cover block">
+                    </div>
+                
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 glitch-element text-black" data-text="Aursmile – Professional Healthcare/Dental Landing Page">
+                            Aursmile – Professional Healthcare/Dental Landing Page
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            A clean and professional landing page designed for a healthcare/dental service provider. The primary focus was on establishing user trust through a minimalist aesthetic, clear typography, and an intuitive layout. I built this project to be highly performant and fully responsive.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">HTML5</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">Javascript</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">CSS 3</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">Landing Page</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="https://winnger748.github.io/CloudVault/" target="_blank" class="project-card block glitch-hover bg-white border-3 border-hard-black shadow-brutal overflow-hidden cursor-pointer no-underline">
+    
+                    <div class="project-image border-b-3 border-hard-black">
+                        <img src="images/work3.png" 
+                             alt="CloudVault Landing Page" 
+                             class="w-full h-48 object-cover block">
+                    </div>
+                
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 glitch-element text-black" data-text="CloudVault – Modern Cloud Storage Landing Page">
+                            CloudVault – Modern Cloud Storage Landing Page
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            CloudVault is a high-end landing page for a secure cloud storage service. The goal was to create a modern, trust-inspiring interface with a focus on conversion and performance. I implemented a fully responsive design ensures that every element scales perfectly across all devices.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">HTML5</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">Javascript</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">CSS 3</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">Landing Page</span>
+                        </div>
+                    </div>
+                </a>
+
+
+                <div class="project-card glitch-hover bg-white border-3 border-hard-black shadow-brutal overflow-hidden">
+                    <div class="project-image border-b-3 border-hard-black">
+                        <img src="images/work4.png" 
+                             alt="E-commerce Website" 
+                             class="w-full h-48 object-cover block">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 glitch-element" data-text="sokany.ge">E-commerce Website</h3>
+                        <p class="text-gray-600 text-sm mb-4">Built and optimized a full-scale e-commerce platform for a local retail brand. The primary focus was on integrating complex financial modules, including secure payment gateways and custom bank installment services (Bogpayment/Boginstallment). Successfully optimized the layout for high performance and mobile responsiveness.</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">PHP</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">SEO</span>
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">Payment Integration</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">Okaycms</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <a href="https://www.nital.app" target="_blank" class="project-card block glitch-hover bg-white border-3 border-hard-black shadow-brutal overflow-hidden cursor-pointer no-underline">
+    
+                    <div class="project-image border-b-3 border-hard-black">
+                        <img src="images/work5.png" 
+                             alt="Anonymous Chat Application" 
+                             class="w-full h-48 object-cover block">
+                    </div>
+                
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 glitch-element text-black" data-text="anonymous chat application">
+                            anonymous chat application
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Developed and launched a high-performance anonymous chat application with a 24-hour message lifecycle. The project involved real-time infrastructure and database scalability. Key features include a countdown timer for messages and a modern user interface.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-cyber-lime border-2 border-hard-black text-xs font-bold text-black">React</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">next.js</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">supabase</span>
+                            <span class="px-2 py-1 bg-electric-blue text-white border-2 border-hard-black text-xs font-bold">API Integration</span>
+                        </div>
+                    </div>
+                </a>
+
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT FORM (Invoice Style) ===== -->
+    <section id="contact" class="py-16 sm:py-20 bg-hard-black">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="invoice-form p-6 sm:p-8 lg:p-12">
+                <h2 class="text-3xl sm:text-4xl font-black mb-8 tracking-tighter">// LET'S_BUILD</h2>
+                
+                <form id="contactForm" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <input type="text" placeholder="YOUR NAME" class="form-input font-bold" required>
+                        <input type="email" placeholder="YOUR EMAIL" class="form-input font-bold" required>
+                    </div>
+                    <input type="text" placeholder="PROJECT TITLE" class="form-input w-full font-bold" required>
+                    <textarea placeholder="PROJECT DESCRIPTION" rows="4" class="form-input w-full font-bold" required></textarea>
+                    <button type="submit" 
+                            class="w-full py-4 bg-cyber-lime text-hard-black font-black text-lg border-3 border-hard-black shadow-brutal hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        SEND INQUIRY →
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-off-white border-t-3 border-hard-black py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="font-bold text-lg">© 2026 WINNGER. All rights reserved. </p>
+            <p class="text-sm text-gray-600 mt-2">Built by Levani Samsonidze.</p>
+        </div>
+    </footer>
+    <script>
+ // ============================================
+        // CUSTOM MAGNETIC CURSOR
+        // ============================================
+        const cursor = document.getElementById('customCursor');
+        const cursorDot = document.getElementById('cursorDot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        function animateCursor() {
+            const dx = mouseX - cursorX;
+            const dy = mouseY - cursorY;
+            cursorX += dx * 0.15;
+            cursorY += dy * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Expand cursor on interactive elements
+        const interactiveElements = document.querySelectorAll('button, a, input, textarea, .physics-tag, .project-card, .bento-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+        });
+
+        // ============================================
+        // DRAGGABLE TERMINAL WITH MATRIX RAIN
+        // ============================================
+        const terminalWindow = document.getElementById('terminalWindow');
+        const terminalHeader = document.getElementById('terminalHeader');
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const ctx = matrixCanvas.getContext('2d');
+
+        let isDragging = false;
+        let currentX, currentY, initialX, initialY;
+
+        // Terminal dragging logic
+        terminalHeader.addEventListener('mousedown', (e) => {
+            if (e.target.tagName === 'BUTTON') return;
+            isDragging = true;
+            const rect = terminalWindow.getBoundingClientRect();
+            initialX = e.clientX - rect.left;
+            initialY = e.clientY - rect.top;
+            terminalWindow.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            terminalWindow.style.left = (e.clientX - initialX) + 'px';
+            terminalWindow.style.top = (e.clientY - initialY) + 'px';
+            terminalWindow.style.transform = 'none';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            terminalWindow.style.cursor = '';
+        });
+
+        // Matrix Rain Effect (inside terminal only)
+        function resizeCanvas() {
+            matrixCanvas.width = terminalWindow.offsetWidth;
+            matrixCanvas.height = terminalWindow.offsetHeight;
+        }
+
+        const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+        const fontSize = 14;
+        let columns, drops;
+
+        function initMatrix() {
+            resizeCanvas();
+            columns = Math.floor(matrixCanvas.width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+            ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        let matrixInterval;
+        function startMatrix() {
+            initMatrix();
+            matrixInterval = setInterval(drawMatrix, 50);
+        }
+
+        function stopMatrix() {
+            clearInterval(matrixInterval);
+        }
+
+        // Terminal functions
+        function toggleTerminal() {
+            if (terminalWindow.classList.contains('active')) {
+                closeTerminal();
+            } else {
+                terminalWindow.classList.add('active');
+                startMatrix();
+                setTimeout(() => terminalInput.focus(), 100);
+            }
+        }
+
+        function closeTerminal() {
+            terminalWindow.classList.remove('active');
+            stopMatrix();
+        }
+
+        function minimizeTerminal() {
+            terminalWindow.style.height = '50px';
+            terminalWindow.style.overflow = 'hidden';
+        }
+
+        // Terminal commands
+        const commands = {
+            help: `
+                <div class="text-cyber-lime font-bold">AVAILABLE COMMANDS:</div>
+                <div class="mt-2">→ <span class="text-electric-blue">about</span> - Learn about me</div>
+                <div>→ <span class="text-electric-blue">projects</span> - View my work</div>
+                <div>→ <span class="text-electric-blue">skills</span> - Technical skills</div>
+                <div>→ <span class="text-electric-blue">contact</span> - Get in touch</div>
+                <div>→ <span class="text-electric-blue">clear</span> - Clear terminal</div>
+                <div>→ <span class="text-electric-blue">matrix</span> - Toggle matrix effect</div>
+            `,
+            about: `
+    <div class="text-cyber-lime font-bold">⚡ ABOUT_ME</div>
+    <div class="mt-2">Full-Stack Developer focused on building modern, high-performance web applications.</div>
+    <div>Specializing in Next.js, React, Node.js, and Supabase.</div>
+    <div>I turn complex ideas into simple, fast and scalable digital products.</div>
+    <div class="mt-2 text-electric-blue">Clean code. Brutal performance.</div>
+`,
+projects: `
+    <div class="text-cyber-lime font-bold">📁 PROJECTS/</div>
+    <div class="mt-2">→ Pulsefit – Fitness & Gym Landing Page (HTML/CSS/JS)</div>
+    <div>→ Aursmile – Healthcare/Dental Landing Page (HTML/CSS/JS)</div>
+    <div>→ CloudVault – Cloud Storage Landing Page (HTML/CSS/JS)</div>
+    <div>→ E-commerce Platform (PHP, OkayCMS, Payment Integration, SEO)</div>
+    <div>→ Anonymous Chat App (React, Next.js, Supabase, APIs)</div>
+`,
+skills: `
+    <div class="text-cyber-lime font-bold">🛠️ TECH_STACK</div>
+    <div class="mt-2">Frontend: React, Next.js, TypeScript, Tailwind</div>
+    <div>Backend: Node.js, PHP, Supabase</div>
+    <div>Database / APIs: PostgreSQL, REST APIs</div>
+    <div>Tools: Git, GitHub, Vercel, Figma, VS Code</div>
+`,
+            contact: `
+                <div class="text-cyber-lime font-bold">📬 CONTACT</div>
+                <div class="mt-2">Email: samsonidzelevani123@gmail.com</div>
+                <div>GitHub: github.com/winnger748</div>
+                <div class="mt-2 text-gray-400">Let's build something insane!</div>
+            `,
+            clear: '',
+            matrix: 'Matrix effect toggled!'
+        };
+
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.toLowerCase().trim();
+                
+                if (command === 'clear') {
+                    terminalOutput.innerHTML = '';
+                } else if (command === 'matrix') {
+                    if (matrixInterval) {
+                        stopMatrix();
+                    } else {
+                        startMatrix();
+                    }
+                    terminalOutput.innerHTML += `
+                        <div class="mt-2">
+                            <span class="text-electric-blue">❯</span> ${command}
+                            <div class="text-gray-400 mt-1">${commands[command]}</div>
+                        </div>
+                    `;
+                } else if (commands[command]) {
+                    terminalOutput.innerHTML += `
+                        <div class="mt-2">
+                            <span class="text-electric-blue">❯</span> ${command}
+                            <div class="mt-1">${commands[command]}</div>
+                        </div>
+                    `;
+                } else if (command) {
+                    terminalOutput.innerHTML += `
+                        <div class="mt-2">
+                            <span class="text-electric-blue">❯</span> ${command}
+                            <div class="text-red-500 mt-1">Command not found: ${command}</div>
+                        </div>
+                    `;
+                }
+                
+                terminalInput.value = '';
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+        });
+
+        // ============================================
+        // PHYSICS-BASED TECH STACK (Vanilla JS Physics Engine)
+        // ============================================
+        const sandbox = document.getElementById('physicsSandbox');
+        const tags = [];
+        const gravity = 0.5;
+        const friction = 0.99;
+        const bounce = -0.7;
+
+        class PhysicsTag {
+            constructor(element, x, y) {
+                this.element = element;
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.width = element.offsetWidth;
+                this.height = element.offsetHeight;
+                this.isDragging = false;
+                this.dragOffsetX = 0;
+                this.dragOffsetY = 0;
+                
+                this.setupDrag();
+                tags.push(this);
+            }
+
+            setupDrag() {
+                this.element.addEventListener('mousedown', (e) => {
+                    this.isDragging = true;
+                    this.vx = 0;
+                    this.vy = 0;
+                    const rect = this.element.getBoundingClientRect();
+                    const sandboxRect = sandbox.getBoundingClientRect();
+                    this.dragOffsetX = e.clientX - rect.left;
+                    this.dragOffsetY = e.clientY - rect.top;
+                    this.element.style.zIndex = '100';
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!this.isDragging) return;
+                    const sandboxRect = sandbox.getBoundingClientRect();
+                    this.x = e.clientX - sandboxRect.left - this.dragOffsetX;
+                    this.y = e.clientY - sandboxRect.top - this.dragOffsetY;
+                    this.updatePosition();
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (this.isDragging) {
+                        this.isDragging = false;
+                        this.vx = (Math.random() - 0.5) * 5;
+                        this.vy = (Math.random() - 0.5) * 5;
+                        this.element.style.zIndex = '1';
+                    }
+                });
+
+                // Touch support
+                this.element.addEventListener('touchstart', (e) => {
+                    this.isDragging = true;
+                    this.vx = 0;
+                    this.vy = 0;
+                    const rect = this.element.getBoundingClientRect();
+                    const sandboxRect = sandbox.getBoundingClientRect();
+                    this.dragOffsetX = e.touches[0].clientX - rect.left;
+                    this.dragOffsetY = e.touches[0].clientY - rect.top;
+                    this.element.style.zIndex = '100';
+                    e.preventDefault();
+                });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (!this.isDragging) return;
+                    const sandboxRect = sandbox.getBoundingClientRect();
+                    this.x = e.touches[0].clientX - sandboxRect.left - this.dragOffsetX;
+                    this.y = e.touches[0].clientY - sandboxRect.top - this.dragOffsetY;
+                    this.updatePosition();
+                });
+
+                document.addEventListener('touchend', () => {
+                    if (this.isDragging) {
+                        this.isDragging = false;
+                        this.vx = (Math.random() - 0.5) * 5;
+                        this.vy = (Math.random() - 0.5) * 5;
+                        this.element.style.zIndex = '1';
+                    }
+                });
+            }
+
+            updatePosition() {
+                this.element.style.transform = `translate(${this.x}px, ${this.y}px)`;
+            }
+
+            update(sandboxWidth, sandboxHeight) {
+                if (this.isDragging) return;
+
+                // Apply gravity
+                this.vy += gravity;
+                
+                // Apply friction
+                this.vx *= friction;
+                this.vy *= friction;
+
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Boundary collisions
+                if (this.x <= 0) {
+                    this.x = 0;
+                    this.vx *= bounce;
+                }
+                if (this.x + this.width >= sandboxWidth) {
+                    this.x = sandboxWidth - this.width;
+                    this.vx *= bounce;
+                }
+                if (this.y <= 0) {
+                    this.y = 0;
+                    this.vy *= bounce;
+                }
+                if (this.y + this.height >= sandboxHeight) {
+                    this.y = sandboxHeight - this.height;
+                    this.vy *= bounce;
+                }
+
+                // Stop very small velocities
+                if (Math.abs(this.vx) < 0.01) this.vx = 0;
+                if (Math.abs(this.vy) < 0.01) this.vy = 0;
+
+                this.updatePosition();
+            }
+
+            // Check collision with another tag
+            checkCollision(other) {
+                const dx = (this.x + this.width/2) - (other.x + other.width/2);
+                const dy = (this.y + this.height/2) - (other.y + other.height/2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const minDist = (this.width + other.width) / 2;
+
+                if (distance < minDist && distance > 0) {
+                    // Collision response
+                    const angle = Math.atan2(dy, dx);
+                    const targetX = this.x + Math.cos(angle) * minDist;
+                    const targetY = this.y + Math.sin(angle) * minDist;
+                    const ax = (targetX - other.x) * 0.05;
+                    const ay = (targetY - other.y) * 0.05;
+                    
+                    this.vx += ax;
+                    this.vy += ay;
+                    other.vx -= ax;
+                    other.vy -= ay;
+                }
+            }
+        }
+
+        // Create tech stack tags
+        const techStack = [
+            { name: 'Next.js', color: '#000000', textColor: '#CCFF00' },
+            { name: 'Supabase', color: '#0066FF', textColor: '#FFFFFF' },
+            { name: 'Vercel', color: '#000000', textColor: '#FFFFFF' },
+            { name: 'GitHub', color: '#CCFF00', textColor: '#000000' },
+            { name: 'AI/ML', color: '#000000', textColor: '#CCFF00' },
+            { name: 'Tailwind', color: '#0066FF', textColor: '#FFFFFF' },
+        ];
+
+        function initPhysicsSandbox() {
+            const sandboxRect = sandbox.getBoundingClientRect();
+            
+            techStack.forEach((tech, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'physics-tag';
+                tag.textContent = tech.name;
+                tag.style.background = tech.color;
+                tag.style.color = tech.textColor;
+                
+                const x = Math.random() * (sandboxRect.width - 150);
+                const y = Math.random() * (sandboxRect.height - 60);
+                tag.style.left = '0';
+                tag.style.top = '0';
+                
+                sandbox.appendChild(tag);
+                new PhysicsTag(tag, x, y);
+            });
+        }
+
+        // Physics animation loop
+        function physicsLoop() {
+            const sandboxRect = sandbox.getBoundingClientRect();
+            
+            for (let i = 0; i < tags.length; i++) {
+                for (let j = i + 1; j < tags.length; j++) {
+                    tags[i].checkCollision(tags[j]);
+                }
+                tags[i].update(sandboxRect.width, sandboxRect.height);
+            }
+            
+            requestAnimationFrame(physicsLoop);
+        }
+
+        initPhysicsSandbox();
+        physicsLoop();
+
+        // ============================================
+        // COUNTER ANIMATIONS
+        // ============================================
+        function animateCounter(elementId, target, duration = 2000) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // Intersection Observer for counters
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter('projectsCount', 18);
+                    animateCounter('hoursCount', 800);
+                    animateCounter('clientsCount', 18);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const statsCard = document.querySelector('.bento-card:nth-child(2)');
+        if (statsCard) counterObserver.observe(statsCard);
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+        const fadeElements = document.querySelectorAll('.project-card, .bento-card');
+        
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    fadeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        fadeElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            fadeObserver.observe(el);
+        });
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ============================================
+        // CONTACT FORM HANDLING
+        // ============================================
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Brutalist success animation
+            const button = e.target.querySelector('button');
+            const originalText = button.textContent;
+            button.textContent = '⚡ MESSAGE SENT!';
+            button.style.background = '#CCFF00';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                e.target.reset();
+            }, 3000);
+        });
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        console.log('%c⚡ WINNGER | Full-Stack Developer ⚡',
+            'font-size: 24px; font-weight: bold; color: #CCFF00; background: #000000; padding: 10px;');
+        console.log('%cOpen the terminal for an interactive experience!',
+            'font-size: 14px; color: #0066FF;');
+
+    </script>
+</body>
+</html>
